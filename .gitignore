@@ -1,0 +1,19 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+ContainerConfig/.env
+ContainerConfig/docker-compose.yml
+*.pem
+*.000002
+ContainerConfig/mysql_206/ib_buffer_pool
+ContainerConfig/mysql_206/ibtmp1
+*.sock
+ContainerConfig/mysql_206/undo_001
+ContainerConfig/mysql_206/undo_002
+*.ibd
+*.dblwr
+*.cnf
+*.000001
+*.index
+ContainerConfig/mysql_206/ibdata1
+.vscode/settings.json
+*.sql
