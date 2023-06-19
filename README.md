@@ -1,2 +1,2 @@
 # JavaWithSQL
- Repository to learning about Java with SQL.
+ Repository for learning about Java with SQL.
