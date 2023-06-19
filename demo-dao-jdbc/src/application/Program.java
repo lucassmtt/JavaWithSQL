@@ -1,18 +1,26 @@
 package application;
 
+import model.dao.DaoFactory;
+import model.dao.SellerDao;
+import model.dao.impl.DepartmentJDBC;
+import model.dao.impl.SellerDaoJDBC;
 import model.entities.Department;
 import model.entities.Seller;
 
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.Date;
+import java.util.Properties;
 
 public class Program
 {
     public static void main(String[] args)
     {
-        Department department = new Department(1, "Gym");
-        Seller seller = new Seller(21, "Jon", "jon@gmail.con", new Date(), 2000.0, department);
+        SellerDao sellerDao = DaoFactory.createSellerDao();
 
-        System.out.println(department);
+        Seller seller = sellerDao.findById(2);
         System.out.println(seller);
     }
 }
