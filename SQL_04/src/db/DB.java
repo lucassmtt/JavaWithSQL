@@ -1,16 +1,20 @@
 package db;
 
-
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-public class DB{
-    private static Connection connection = null;
-    public static Properties loadProperties(){
+public class DB
+{
+    public static Connection connection = null;
+
+    public static Properties getProperties()
+    {
         try(FileInputStream fileInputStream = new FileInputStream(
                 "/home/lucas-motta/Documents/GitHub/JavaWithSQL/ContainerConfig/.env"
-        )) {
+        ))
+        {
             Properties properties = new Properties();
             properties.load(fileInputStream);
             return properties;
@@ -20,52 +24,54 @@ public class DB{
         }
     }
 
-    public static Connection getConnection(){
+    public static Connection getConnection()
+    {
         if (connection == null){
-            try{
-                Properties properties = loadProperties();
-                String url = properties.getProperty("dburl");
-                connection = DriverManager.getConnection(url, properties);
-                System.out.println("Get connect success!");
+            try {
+                Properties properties = getProperties();
+                connection = DriverManager.getConnection(properties.getProperty("dburl"), properties);
             }
-            catch (SQLException e){
+            catch (Exception e){
                 throw new DbException(e.getMessage());
             }
         }
         return connection;
     }
 
-    public static void closeConnection(){
+    public static void closeConnection()
+    {
         if (connection != null){
             try {
                 connection.close();
-                System.out.println("Connection closed..");
+                System.out.println("Connection closed...");
             }
-            catch (SQLException e){
+            catch (Exception e){
                 throw new DbException(e.getMessage());
             }
         }
     }
 
-    public static void closeStatement(Statement statement){
+    public static void closeStatement(Statement statement)
+    {
         if (statement != null){
             try {
                 statement.close();
-                System.out.println("Closed statement");
+                System.out.println("Statement closed...");
             }
-            catch (SQLException e){
+            catch (Exception e){
                 throw new DbException(e.getMessage());
             }
         }
     }
 
-    public static void closeResultSet(ResultSet resultSet){
+    public static void closeResultSet(ResultSet resultSet)
+    {
         if (resultSet != null){
-            try{
+            try {
                 resultSet.close();
-                System.out.println("Result set closed...");
+                System.out.println("ResultSet closed...");
             }
-            catch (SQLException e){
+            catch (Exception e){
                 throw new DbException(e.getMessage());
             }
         }
