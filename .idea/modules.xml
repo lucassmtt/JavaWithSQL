@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/SQL_03/SQL_03.iml" filepath="$PROJECT_DIR$/SQL_03/SQL_03.iml" />
       <module fileurl="file://$PROJECT_DIR$/SQL_04/SQL_04.iml" filepath="$PROJECT_DIR$/SQL_04/SQL_04.iml" />
       <module fileurl="file://$PROJECT_DIR$/SQL_05/SQL_05.iml" filepath="$PROJECT_DIR$/SQL_05/SQL_05.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo-dao-jdbc/demo-dao-jdbc.iml" filepath="$PROJECT_DIR$/demo-dao-jdbc/demo-dao-jdbc.iml" />
     </modules>
   </component>
 </project>
