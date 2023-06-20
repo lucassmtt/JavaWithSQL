@@ -24,3 +24,5 @@ ContainerConfig/mysql_206/ib_buffer_pool
 out/production/SQL_01/application/Program.class
 out/production/SQL_01/db/DB.class
 *.class
+*.000005
+*.000006

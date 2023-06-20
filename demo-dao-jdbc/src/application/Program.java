@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 public class Program
@@ -22,5 +23,12 @@ public class Program
         System.out.println("=== TEST 1: seller findByID ===: ");
         Seller seller = sellerDao.findById(3);
         System.out.println(seller);
+
+        System.out.println("\n=== TEST 2: seller findByDepartment ===: ");
+        Department department = new Department(2, "Eletronics");
+        List<Seller> list = sellerDao.findByDepartment(department);
+        for (Seller employee : list){
+            System.out.println(employee);
+        }
     }
 }

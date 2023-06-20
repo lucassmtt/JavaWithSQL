@@ -6,11 +6,9 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import java.nio.channels.SelectableChannel;
+import java.sql.*;
+import java.util.*;
 
 public class SellerDaoJDBC implements SellerDao
 {
@@ -66,19 +64,20 @@ public class SellerDaoJDBC implements SellerDao
                 DB.closeStatement(preparedStatement);
             }
         }
+        else{
+            System.out.println("The connection is null...");
+        }
         return null;
     }
 
     private Seller instantiateSeller(ResultSet resultSet) throws SQLException
     {
-        Department department = instantiateDepartment(resultSet);
         Seller seller = new Seller(
             resultSet.getInt("Id"),
             resultSet.getString("Name"),
             resultSet.getString("Email"),
             resultSet.getDate("BirthDate"),
-            resultSet.getDouble("BaseSalary"),
-            department
+            resultSet.getDouble("BaseSalary")
         );
         return seller;
     }
@@ -96,5 +95,49 @@ public class SellerDaoJDBC implements SellerDao
         return null;
     }
 
+    @Override
+    public List<Seller> findByDepartment(Department department)
+    {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        if (connection != null) {
+            try {
+                int id = department.getId();
 
+                String sql = "SELECT base_de_dados.seller.*, base_de_dados.department.Name as DepName " +
+                             "FROM seller INNER JOIN department ON seller.DepartmentId = department.Id " +
+                             "WHERE DepartmentId = ? " +
+                             "ORDER BY Name; ";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, id);
+
+                resultSet = preparedStatement.executeQuery();
+                Map<Integer,Department> map = new HashMap<>();
+                List<Seller> sellerList = new ArrayList<>();
+
+                while (resultSet.next()){
+                    Department dep = map.get(resultSet.getInt("DepartmentId"));
+                    if (dep == null){
+                        dep = instantiateDepartment(resultSet);
+                        map.put(resultSet.getInt("DepartmentId"), dep);
+                    }
+                    Seller seller = instantiateSeller(resultSet);
+                    seller.setDepartment(dep);
+                    sellerList.add(seller);
+                }
+                return sellerList;
+            }
+            catch (Exception e){
+                throw new DbException(e.getMessage());
+            }
+            finally {
+                DB.closeStatement(preparedStatement);
+                DB.closeResultSet(resultSet);
+            }
+        }
+        else{
+            System.out.println("The connection is empty...");
+            return null;
+        }
+    }
 }
