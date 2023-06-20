@@ -6,11 +6,12 @@ import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.dao.SellerDao;
 import model.entities.Department;
-import model.entities.Seller;
 
-import javax.xml.transform.Result;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DepartmentDaoJDBC implements DepartmentDao
 {
@@ -129,12 +130,61 @@ public class DepartmentDaoJDBC implements DepartmentDao
     @Override
     public Department findByID(Integer id)
     {
+        if (connection != null)
+        {
+            PreparedStatement preparedStatement = null;
+            ResultSet resultSet = null;
+            try {
+                String sql = "SELECT * FROM base_de_dados.department WHERE Id = ? ";
+                preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, id);
 
-        return null;
+                resultSet = preparedStatement.executeQuery();
+                Department department = new Department();
+                while (resultSet.next()){
+                    department.setId(resultSet.getInt("Id"));
+                    department.setName(resultSet.getString("Name"));
+                }
+                return department;
+            }
+            catch (SQLException e){
+                throw new DbException(e.getMessage());
+            }
+        }
+        else {
+            System.out.println("The connection is empty");
+            return null;
+        }
     }
 
     @Override
-    public List<Department> findAll() {
+    public List<Department> findAll()
+    {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Department> departmentList = new ArrayList<>();
+        Map<Integer, Department> departmentMap = new HashMap<>();
+
+        if (connection != null){
+            try {
+                String sql = "SELECT * FROM base_de_dados.department ";
+                preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next())
+                {
+                    Department department = new Department(resultSet.getInt("Id"), resultSet.getString("Name"));
+                    departmentList.add(department);
+                }
+                return departmentList;
+            }
+            catch (SQLException e){
+                throw new DbException(e.getMessage());
+            }
+        }
+        else {
+            System.out.println("The connection is null...");
+        }
         return null;
     }
 }
