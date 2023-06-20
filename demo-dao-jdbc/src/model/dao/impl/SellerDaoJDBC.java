@@ -96,7 +96,6 @@ public class SellerDaoJDBC implements SellerDao
         {
             Scanner scanner = new Scanner(System.in);
             PreparedStatement preparedStatement = null;
-            ResultSet resultSet = null;
 
             try {
                 String sql = "DELETE FROM base_de_dados.seller WHERE Id = ? ";
