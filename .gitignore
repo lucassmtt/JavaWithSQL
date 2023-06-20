@@ -26,3 +26,4 @@ out/production/SQL_01/db/DB.class
 *.class
 *.000005
 *.000006
+/ContainerConfig/mysql_206/
