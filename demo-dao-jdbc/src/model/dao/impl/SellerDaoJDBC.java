@@ -8,6 +8,7 @@ import model.entities.Seller;
 
 import java.nio.channels.SelectableChannel;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 public class SellerDaoJDBC implements SellerDao
@@ -20,7 +21,42 @@ public class SellerDaoJDBC implements SellerDao
     }
 
     @Override
-    public void insert(Seller obj) {
+    public void insert(Seller obj)
+    {
+        if (connection != null){
+            PreparedStatement preparedStatement = null;
+            ResultSet resultSet = null;
+            try{
+                String sql = "INSERT INTO base_de_dados.seller (Name, Email, BirthDate, BaseSalary, DepartmentId) " +
+                        "VALUES (?, ?, ?, ?, ?); ";
+                preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, obj.getName());
+                preparedStatement.setString(2, obj.getEmail());
+                preparedStatement.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+                preparedStatement.setDouble(4, obj.getBaseSalary());
+                preparedStatement.setInt(5, obj.getDepartment().getId());
+
+                int rows_affect = preparedStatement.executeUpdate();
+                
+                if (rows_affect > 0){
+                    resultSet = preparedStatement.getGeneratedKeys();
+                    if (resultSet.next()){
+                        int id = resultSet.getInt(1);
+                        obj.setId(id);
+                    }
+                }
+                else {
+                    throw new DbException("Unexpected error! No rows affect!");
+                }
+            }
+            catch (Exception e){
+                throw new DbException(e.getMessage());
+            }
+            finally {
+                DB.closeResultSet(resultSet);
+                DB.closeStatement(preparedStatement);
+            }
+        }
 
     }
 
@@ -62,6 +98,7 @@ public class SellerDaoJDBC implements SellerDao
             }
             finally {
                 DB.closeStatement(preparedStatement);
+                DB.closeResultSet(resultSet);
             }
         }
         else{
@@ -121,6 +158,10 @@ public class SellerDaoJDBC implements SellerDao
             }
             catch (Exception e){
                 throw new DbException(e.getMessage());
+            }
+            finally {
+                DB.closeStatement(preparedStatement);
+                DB.closeResultSet(resultSet);
             }
         }
         System.out.println("The connection is empty...");

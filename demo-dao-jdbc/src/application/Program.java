@@ -36,5 +36,10 @@ public class Program
         for (Seller employee : list){
             System.out.println(employee);
         }
+
+        System.out.println("\n=== TEST 4: seller insert ===: ");
+        Seller sellerToInsert = new Seller(null, "Joao", "Joao@gmail.com", new Date(), 4000.00, department);
+        sellerDao.insert(sellerToInsert);
+        System.out.println("Successful insertion! ID: " + sellerToInsert.getId());
     }
 }
