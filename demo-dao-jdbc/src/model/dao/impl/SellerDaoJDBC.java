@@ -122,6 +122,37 @@ public class SellerDaoJDBC implements SellerDao
     }
 
     @Override
+    public void deleteByDepartment(Integer id)
+    {
+        if (connection != null)
+        {
+            PreparedStatement preparedStatement = null;
+            try {
+                String sql = "DELETE FROM base_de_dados.seller WHERE DepartmentId = ? ";
+                preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, id);
+
+                int rows_affect = preparedStatement.executeUpdate();
+                if (rows_affect > 0){
+                    System.out.println("Rows affected: " + rows_affect);
+                }
+                else {
+                    System.out.println("No rows affected...");
+                }
+            }
+            catch (SQLException e){
+                throw new DbException(e.getMessage());
+            }
+            finally {
+                DB.closeStatement(preparedStatement);
+            }
+        }
+        else {
+            System.out.println("The connection is empty...");
+        }
+    }
+
+    @Override
     public Seller findById(Integer id)
     {
         PreparedStatement preparedStatement = null;
@@ -262,4 +293,6 @@ public class SellerDaoJDBC implements SellerDao
         System.out.println("The connection is empty...");
         return null;
     }
+
+
 }

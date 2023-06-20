@@ -21,7 +21,7 @@ public class ProgramToTestingDepartmentDaoJDBC
         departmentDao.update(department_to_update);
 
         System.out.println("--- 3 TEST --- DELETE BY ID  ");
-        departmentDao.deleteById(5);
+        departmentDao.deleteById(2);
 
     }
 }

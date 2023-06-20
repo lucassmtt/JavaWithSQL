@@ -2,8 +2,11 @@ package model.dao.impl;
 
 import db.DB;
 import db.DbException;
+import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
+import model.dao.SellerDao;
 import model.entities.Department;
+import model.entities.Seller;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -109,7 +112,15 @@ public class DepartmentDaoJDBC implements DepartmentDao
                 }
             }
             catch (SQLException e){
-                throw new DbException(e.getMessage());
+                if (e.getErrorCode() == 1451){
+                    System.out.println("Deleting data assigned to department! ");
+                    SellerDao sellerDao = DaoFactory.createSellerDao();
+                    sellerDao.deleteByDepartment(Id);
+                    deleteById(Id);
+                }
+                else{
+                    throw new DbException(e.getMessage());
+                }
             }
         }
 
@@ -118,7 +129,7 @@ public class DepartmentDaoJDBC implements DepartmentDao
     @Override
     public Department findByID(Integer id)
     {
-        
+
         return null;
     }
 
