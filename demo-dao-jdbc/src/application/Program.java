@@ -41,5 +41,12 @@ public class Program
         Seller sellerToInsert = new Seller(null, "Joao", "Joao@gmail.com", new Date(), 4000.00, department);
         sellerDao.insert(sellerToInsert);
         System.out.println("Successful insertion! ID: " + sellerToInsert.getId());
+
+        System.out.println("\n=== TEST 5: seller update ===: ");
+        seller = sellerDao.findById(2);
+        seller.setName("Matheus Oliveira");
+        seller.setDepartment(department);
+        sellerDao.update(seller);
+        System.out.println("Update complete");
     }
 }
