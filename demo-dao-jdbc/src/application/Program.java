@@ -43,10 +43,13 @@ public class Program
         System.out.println("Successful insertion! ID: " + sellerToInsert.getId());
 
         System.out.println("\n=== TEST 5: seller update ===: ");
-        seller = sellerDao.findById(2);
+        seller = sellerDao.findById(20);
         seller.setName("Matheus Oliveira");
         seller.setDepartment(department);
         sellerDao.update(seller);
         System.out.println("Update complete");
+
+        System.out.println("\n=== TEST 6: seller deleteById ===: ");
+        sellerDao.deleteById(20);
     }
 }

@@ -90,8 +90,36 @@ public class SellerDaoJDBC implements SellerDao
     }
 
     @Override
-    public void delete(Seller obj) {
+    public void deleteById(Integer Id)
+    {
+        if (connection != null)
+        {
+            Scanner scanner = new Scanner(System.in);
+            PreparedStatement preparedStatement = null;
+            ResultSet resultSet = null;
 
+            try {
+                String sql = "DELETE FROM base_de_dados.seller WHERE Id = ? ";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, Id);
+
+                int rows_affect = preparedStatement.executeUpdate();
+
+                if (rows_affect > 0) {
+                    System.out.println("Data delete with success...");
+                }
+                else {
+                    throw new DbException("Deletion incomplete...");
+                }
+            }
+            catch (SQLException e)
+            {
+                throw new DbException(e.getMessage());
+            }
+        }
+        else {
+            System.out.println("The connection is empty...");
+        }
     }
 
     @Override
