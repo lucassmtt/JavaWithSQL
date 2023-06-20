@@ -91,7 +91,39 @@ public class SellerDaoJDBC implements SellerDao
     }
 
     @Override
-    public List<Seller> findAll() {
+    public List<Seller> findAll()
+    {
+        if (connection != null)
+        {
+            PreparedStatement preparedStatement = null;
+            ResultSet resultSet = null;
+            Map<Integer, Department> map = new HashMap<>();
+            List<Seller> sellerList = new ArrayList<>();
+            try {
+                String sql = "SELECT base_de_dados.seller.*, base_de_dados.department.Name as DepName " +
+                        "FROM seller INNER JOIN department on seller.DepartmentId = department.Id " +
+                        "ORDER BY Name; ";
+                preparedStatement = connection.prepareStatement(sql);
+                resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()){
+                    Department department = map.get(resultSet.getInt("DepartmentId"));
+
+                    if (department == null){
+                        department = instantiateDepartment(resultSet);
+                        map.put(resultSet.getInt("DepartmentId"), department);
+                    }
+
+                    Seller seller = instantiateSeller(resultSet);
+                    sellerList.add(seller);
+                }
+                return sellerList;
+            }
+            catch (Exception e){
+                throw new DbException(e.getMessage());
+            }
+        }
+        System.out.println("The connection is empty...");
         return null;
     }
 
@@ -135,9 +167,7 @@ public class SellerDaoJDBC implements SellerDao
                 DB.closeResultSet(resultSet);
             }
         }
-        else{
-            System.out.println("The connection is empty...");
-            return null;
-        }
+        System.out.println("The connection is empty...");
+        return null;
     }
 }

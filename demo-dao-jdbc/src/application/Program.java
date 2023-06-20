@@ -30,5 +30,11 @@ public class Program
         for (Seller employee : list){
             System.out.println(employee);
         }
+
+        System.out.println("\n=== TEST 3: seller findAll ===: ");
+        list = sellerDao.findAll();
+        for (Seller employee : list){
+            System.out.println(employee);
+        }
     }
 }
