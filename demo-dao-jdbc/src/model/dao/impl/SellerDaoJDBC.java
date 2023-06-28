@@ -6,9 +6,7 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
-import java.nio.channels.SelectableChannel;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 public class SellerDaoJDBC implements SellerDao
@@ -94,7 +92,6 @@ public class SellerDaoJDBC implements SellerDao
     {
         if (connection != null)
         {
-            Scanner scanner = new Scanner(System.in);
             PreparedStatement preparedStatement = null;
 
             try {
